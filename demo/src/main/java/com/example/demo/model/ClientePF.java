@@ -1,32 +1,22 @@
 package com.example.demo.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+
+@Entity
+@Getter
+@Setter
+@Table(name = "cliente_pf")
 public class ClientePF extends Cliente{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "cpf")
     private String cpf;
+
+    @Column(name = "rg")
     private String rg;
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-    public String getCpf() {
-        return cpf;
-    }
-    public void setRg(String rg) {
-        this.rg = rg;
-    }
-    public String getRg() {
-        return rg;
-    }
-
-    @Override
-    public Pessoa getPessoa() {
-        return super.getPessoa();
-    }
-    @Override
-    public String getNome() {
-        return super.getNome();
-    }
-    @Override
-    public String getEndereco() {
-        return super.getEndereco();
-    }
 }

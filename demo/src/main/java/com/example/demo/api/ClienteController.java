@@ -1,5 +1,6 @@
 package com.example.demo.api;
 
+import com.example.demo.model.Cliente;
 import com.example.demo.model.ClientePF;
 import com.example.demo.model.ClientePJ;
 import com.example.demo.service.ClienteService;
@@ -20,8 +21,14 @@ public class ClienteController {
         return this.service.cadastraCliente(pessoa, json);
     }
 
-    @GetMapping("/clientes/P{pessoa}")
-    public List pegaListaClientes(@PathVariable Character pessoa) {
-       return this.service.pegaListaClientes(pessoa);
+    @GetMapping("/clientes")
+    public List<Cliente> getClientes() {
+        return this.service.getClientes();
     }
+
+//    @GetMapping("/clientes/P{pessoa}")
+//    public List pegaListaClientes(@PathVariable Character pessoa) {
+//       return this.service.pegaListaClientes(pessoa);
+//    }
+
 }

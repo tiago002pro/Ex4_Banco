@@ -1,33 +1,26 @@
 package com.example.demo.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+
+@Entity
+@Getter
+@Setter
+@Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "cliente")
 public class Cliente {
-    private Pessoa pessoa;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "pessoa")
+    private String pessoa;
+
+    @Column(name = "nome")
     private String nome;
+
+    @Column(name = "endereco")
     private String endereco;
-//    private String bairro;
-//    private String cep;
-//    private String cidade;
-//    private String estado
-
-
-    public void setPessoa(Pessoa pessoa) {
-        this.pessoa = pessoa;
-    }
-
-    public Pessoa getPessoa() {
-        return pessoa;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-    public String getNome() {
-        return nome;
-    }
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
-    public String getEndereco() {
-        return endereco;
-    }
 }

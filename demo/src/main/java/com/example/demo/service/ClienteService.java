@@ -20,7 +20,7 @@ public class ClienteService {
         if (pessoa == 'F') {
             ClientePF clientePF = new ClientePF();
 
-            clientePF.setPessoa("Física");
+            clientePF.setTipo("PF");
             clientePF.setNome(json.get("Nome"));
             clientePF.setEndereco(json.get("Endereço"));
             clientePF.setCpf(json.get("CPF"));
@@ -30,7 +30,7 @@ public class ClienteService {
         } else if (pessoa == 'J') {
             ClientePJ clientePJ = new ClientePJ();
 
-            clientePJ.setPessoa("Jurídica");
+            clientePJ.setTipo("PJ");
             clientePJ.setNome(json.get("Nome"));
             clientePJ.setEndereco(json.get("Endereço"));
             clientePJ.setCnpj(json.get("CNPJ"));
@@ -42,6 +42,20 @@ public class ClienteService {
     }
 
     public List<Cliente> getClientes() {
+        return this.repository.findAll();
+    }
+
+    public Cliente getCliente(Long id) {
+        return this.repository.findById(id).get();
+    }
+
+    public List<? extends Cliente> pegaListaClientes(Character pessoa) {
+        if(pessoa == 'F') {
+            return this.repository.findAllPF();
+        }
+        if (pessoa == 'J') {
+            return this.repository.findAllPJ();
+        }
         return this.repository.findAll();
     }
 }

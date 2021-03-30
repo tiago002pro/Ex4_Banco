@@ -1,18 +1,37 @@
 package com.example.demo.api;
 
+import com.example.demo.model.Conta;
+import com.example.demo.service.ContaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ContaController {
 
     @Autowired
-        ContaService service;
+    ContaService service;
 
-//    @PostMapping("conta/c{tipoConta}/cliente/p{pessoa}")
-//    public String criaConta(@PathVariable Character pessoa, @PathVariable Integer id, @PathVariable Character tipoConta, @RequestBody Map<String, Object> json) {
-//        return this.service.criaConta(pessoa, id, tipoConta, json);
-//    }
+    @PostMapping("/conta/C{tipo_conta}/cliente/P{pessoa}/{id_cliente}")
+    public String criaConta(@PathVariable Long id_cliente, @PathVariable Character tipo_conta, @PathVariable Character pessoa, @RequestBody Map<String, String> json) {
+        return this.service.criaConta(id_cliente, tipo_conta, pessoa, json);
+    }
 
-//    @GetMapping("conta/cliente/p{tipoConta}")
+    @GetMapping("/contas")
+    public List<Conta> getContas() {
+        return this.service.getContas();
+    }
+
+    @GetMapping("/contas/cliente/{id}")
+    public List<Conta> getContas(@PathVariable Long id) {
+        return this.service.getContas(id);
+    }
+
+    @GetMapping("conta/{id}")
+    public Conta getContaId(@PathVariable Long id) {
+        return this.service.getContaId(id);
+    }
+
 }

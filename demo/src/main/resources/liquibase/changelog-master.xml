@@ -13,7 +13,7 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="pessoa" type="VARCHAR(20)"/>
+            <column name="tipo" type="VARCHAR(2)"/>
             <column name="nome" type="VARCHAR(200)"/>
             <column name="endereco" type="VARCHAR(200)"/>
         </createTable>
@@ -45,6 +45,25 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="cnpj" type="VARCHAR(20)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="4" author="tiagobarbosa02@outlook.com">
+        <preConditions>
+            <not>
+                <tableExists tableName="conta"/>
+            </not>
+        </preConditions>
+        <createTable tableName="conta">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="id_cliente" type="BIGINT">
+                <constraints foreignKeyName="fk_id_cliente_referesnces_cliente" referencedTableName="cliente" referencedColumnNames="id"/>
+            </column>
+            <column name="tipo_do_cliente" type="VARCHAR(2)"/>
+            <column name="tipo_conta" type="VARCHAR(20)"/>
+            <column name="ag" type="VARCHAR(5)"/>
+            <column name="conta" type="VARCHAR(10)"/>
         </createTable>
     </changeSet>
 

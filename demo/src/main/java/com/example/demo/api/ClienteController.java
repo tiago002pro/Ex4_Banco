@@ -1,8 +1,6 @@
 package com.example.demo.api;
 
 import com.example.demo.model.Cliente;
-import com.example.demo.model.ClientePF;
-import com.example.demo.model.ClientePJ;
 import com.example.demo.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +24,14 @@ public class ClienteController {
         return this.service.getClientes();
     }
 
-//    @GetMapping("/clientes/P{pessoa}")
-//    public List pegaListaClientes(@PathVariable Character pessoa) {
-//       return this.service.pegaListaClientes(pessoa);
-//    }
+    @GetMapping("/cliente/{id}")
+    public Cliente getCliente(@PathVariable Long id) {
+        return this.service.getCliente(id);
+    }
+
+    @GetMapping("/clientes/P{pessoa}")
+    public List<? extends Cliente> pegaListaClientes(@PathVariable Character pessoa) {
+       return this.service.pegaListaClientes(pessoa);
+    }
 
 }

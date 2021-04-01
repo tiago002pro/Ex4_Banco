@@ -3,10 +3,8 @@ package com.example.demo.service;
 import com.example.demo.model.Cliente;
 import com.example.demo.model.Conta;
 import com.example.demo.repository.ContaRepository;
-import liquibase.pro.packaged.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Map;
@@ -20,7 +18,7 @@ public class ContaService {
     @Autowired
     ClienteService clienteService;
 
-    public String criaConta(Long id_cliente, Character tipo_conta, Character pessoa, Map<String, String> json) {
+    public String criaConta(Long id_cliente, Character tipo_conta, Character pessoa, Map<String, Object> json) {
         Cliente cliente = clienteService.getCliente(id_cliente);
         Conta conta = new Conta();
 
@@ -47,8 +45,9 @@ public class ContaService {
         }
 
         conta.setCliente(cliente);
-        conta.setAg(json.get("Agência"));
-        conta.setConta(json.get("Conta"));
+        conta.setAg((Integer) json.get("Agência"));
+        conta.setConta((Integer) json.get("Conta"));
+        conta.setSaldo(0.0);
         this.repository.save(conta);
 
         return "Conta cadastrada com sucesso!";

@@ -15,7 +15,7 @@ public class ContaController {
     ContaService service;
 
     @PostMapping("/conta/C{tipo_conta}/cliente/P{pessoa}/{id_cliente}")
-    public String criaConta(@PathVariable Long id_cliente, @PathVariable Character tipo_conta, @PathVariable Character pessoa, @RequestBody Map<String, String> json) {
+    public String criaConta(@PathVariable Long id_cliente, @PathVariable Character tipo_conta, @PathVariable Character pessoa, @RequestBody Map<String, Object> json) {
         return this.service.criaConta(id_cliente, tipo_conta, pessoa, json);
     }
 

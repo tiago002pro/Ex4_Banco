@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Setter
 @Getter
 @Table(name = "conta")
-public class Conta {
+public class Conta implements Banco{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,12 +21,16 @@ public class Conta {
     private String tipo_do_cliente;
 
     @Column(name = "ag")
-    private String ag;
+    private Integer ag;
 
     @Column(name = "conta")
-    private String conta;
+    private Integer conta;
+
+    @Column(name = "saldo")
+    private Double saldo;
 
     @OneToOne
     @JoinColumn(name = "id_cliente", referencedColumnName = "id")
     private Cliente cliente;
+
 }

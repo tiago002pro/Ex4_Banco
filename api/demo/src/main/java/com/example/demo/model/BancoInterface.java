@@ -1,14 +1,17 @@
 package com.example.demo.model;
 
-import java.util.Calendar;
-
-public interface Banco {
-
+public interface BancoInterface {
 
     default Double deposito(Conta conta, double valor) {
         double novo_saldo = conta.getSaldo() + valor;
         conta.setSaldo(novo_saldo);
 
+        if(conta.getSaldo() >= 0 && conta.getTipo_conta().equals("Corrente")) {
+            conta.setCheque_especial(1000.00);
+        }
+        if (conta.getSaldo() < 0 && conta.getTipo_conta().equals("Corrente")) {
+            conta.setCheque_especial(conta.getSaldo()+1000);
+        }
         return novo_saldo;
     }
 
@@ -18,12 +21,17 @@ public interface Banco {
         if(saldo >= valor) {
             saldo = saldo - valor;
             conta.setSaldo(saldo);
+            if (conta.getSaldo() < 0 && conta.getTipo_conta().equals("Corrente")) {
+                conta.setCheque_especial(conta.getSaldo()+1000);
+            }
             return saldo;
         } else if (saldo < valor && libera_limite(conta)){
             if (libera_valor_limite(saldo, valor)) {
                 saldo = saldo - valor;
                 conta.setSaldo(saldo);
-
+                if (conta.getSaldo() < 0 && conta.getTipo_conta().equals("Corrente")) {
+                    conta.setCheque_especial(conta.getSaldo()+1000);
+                }
                 return saldo;
             } else {
                 return null;

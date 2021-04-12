@@ -14,9 +14,9 @@ public class ContaController {
     @Autowired
     ContaService service;
 
-    @PostMapping("/conta/C{tipo_conta}/cliente/P{pessoa}/{id_cliente}")
-    public String criaConta(@PathVariable Long id_cliente, @PathVariable Character tipo_conta, @PathVariable Character pessoa, @RequestBody Map<String, Object> json) {
-        return this.service.criaConta(id_cliente, tipo_conta, pessoa, json);
+    @PostMapping("/conta/C{tipo_conta}/cliente/{id_cliente}")
+    public String criaConta(@PathVariable Long id_cliente, @PathVariable Character tipo_conta, @RequestBody Map<String, Object> json) {
+        return this.service.criaConta(id_cliente, tipo_conta, json);
     }
 
     @GetMapping("/contas")
@@ -29,7 +29,7 @@ public class ContaController {
         return this.service.getContas(id);
     }
 
-    @GetMapping("conta/{id}")
+    @GetMapping("/conta/{id}")
     public Conta getContaId(@PathVariable Long id) {
         return this.service.getContaId(id);
     }

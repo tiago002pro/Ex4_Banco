@@ -1,6 +1,5 @@
 package com.example.demo.api;
 
-import com.example.demo.model.Banco;
 import com.example.demo.service.BancoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,5 +29,4 @@ public class BancoController {
     public String transferencia(@PathVariable Long id_conta_origem, @PathVariable Long id_conta_destino, @RequestBody Map<String, Object> json) {
         return this.service.transferencia(id_conta_origem, id_conta_destino, json);
     }
-
 }

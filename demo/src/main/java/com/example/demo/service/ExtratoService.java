@@ -2,11 +2,17 @@ package com.example.demo.service;
 
 import com.example.demo.model.Conta;
 import com.example.demo.model.Extrato;
+import com.example.demo.repository.ContaRepository;
 import com.example.demo.repository.ExtratoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -15,76 +21,89 @@ public class ExtratoService {
     @Autowired
     ExtratoRepository repository;
 
-    public void registra_saque(Conta conta, Double valor) {
-        Extrato extrato = new Extrato();
-        List<Extrato> extrato_conta = conta.getLancamento_extrato();
+    @Autowired
+    ContaRepository contaRepository;
 
-        extrato.setTipo_conta(conta.getTipo_conta());
-        extrato.setData(LocalDate.now());
-        extrato.setSaldo(conta.getSaldo()+valor);
-        extrato.setDescricao("Saque");
-        extrato.setValor(valor * (-1));
-        extrato.setNovo_saldo(extrato.getSaldo()+extrato.getValor());
-        extrato.setCheque_especial(conta.getCheque_especial());
-        extrato.setCliente(conta.getCliente());
-        extrato_conta.add(extrato);
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+    public void registraSaque(Conta conta, Double valor) throws ParseException {
+        List<Extrato> extratoConta = conta.getLancamentoExtrato();
+        Extrato extrato = Extrato.builder()
+                .contaTipo(conta.getContaTipo())
+                .data(simpleDateFormat.parse(simpleDateFormat.format(new Date())))
+                .descricao("Saque")
+                .saldo(conta.getSaldo() + valor)
+                .valor(valor * (-1))
+                .novoSaldo(conta.getSaldo() - valor)
+                .chequeEspecial(conta.getChequeEspecial())
+                .juros(conta.getJuros())
+                .cliente(conta.getCliente())
+                .build();
+        extratoConta.add(extrato);
+        this.repository.save(extrato);
+        this.contaRepository.save(conta);
+    }
+
+    public void registraDeposito(Conta conta, Double valor) throws ParseException{
+        List<Extrato> extratoConta = conta.getLancamentoExtrato();
+        Extrato extrato = Extrato.builder()
+                .contaTipo(conta.getContaTipo())
+                .data(simpleDateFormat.parse(simpleDateFormat.format(new Date())))
+                .descricao("Depósito")
+                .saldo(conta.getSaldo() - valor)
+                .valor(valor)
+                .novoSaldo(conta.getSaldo() + valor)
+                .chequeEspecial(conta.getChequeEspecial())
+                .juros(conta.getJuros())
+                .cliente(conta.getCliente())
+                .build();
+        extratoConta.add(extrato);
         this.repository.save(extrato);
     }
 
-    public void registra_deposito(Conta conta, Double valor) {
-        Extrato extrato = new Extrato();
-        List<Extrato> extrato_conta = conta.getLancamento_extrato();
+    public void registraTransferencia(Conta contaOrigem, Conta contaDestino, Double valor) throws ParseException{
+        List<Extrato> ListExtratoContaOrigem = contaOrigem.getLancamentoExtrato();
+        Extrato extratoContaOrigem = Extrato.builder()
+                .contaTipo(contaOrigem.getContaTipo())
+                .data(simpleDateFormat.parse(simpleDateFormat.format(new Date())))
+                .descricao("Transferência Efetuada")
+                .saldo(contaOrigem.getSaldo() + valor)
+                .valor(valor * (-1))
+                .novoSaldo(contaOrigem.getSaldo() - valor)
+                .chequeEspecial(contaOrigem.getChequeEspecial())
+                .juros(contaOrigem.getJuros())
+                .cliente(contaOrigem.getCliente())
+                .build();
+        ListExtratoContaOrigem.add(extratoContaOrigem);
+        this.repository.save(extratoContaOrigem);
 
-        extrato.setTipo_conta(conta.getTipo_conta());
-        extrato.setData(LocalDate.now());
-        extrato.setSaldo(conta.getSaldo()-valor);
-        extrato.setDescricao("Depósito");
-        extrato.setValor(valor);
-        extrato.setNovo_saldo(extrato.getSaldo()+extrato.getValor());
-        extrato.setCheque_especial(conta.getCheque_especial());
-        extrato.setCliente(conta.getCliente());
-        extrato_conta.add(extrato);
-        this.repository.save(extrato);
+        List<Extrato> ListExtratoContaDestino = contaDestino.getLancamentoExtrato();
+        Extrato extratoContaDestino = Extrato.builder()
+                .contaTipo(contaDestino.getContaTipo())
+                .data(simpleDateFormat.parse(simpleDateFormat.format(new Date())))
+                .descricao("ransferência Recebida")
+                .saldo(contaDestino.getSaldo() - valor)
+                .valor(valor)
+                .novoSaldo(contaDestino.getSaldo() + valor)
+                .chequeEspecial(contaDestino.getChequeEspecial())
+                .juros(contaDestino.getJuros())
+                .cliente(contaDestino.getCliente())
+                .build();
+        ListExtratoContaDestino.add(extratoContaDestino);
+        this.repository.save(extratoContaDestino);
     }
 
-    public void registra_transferencia(Conta conta_origem, Conta conta_destino, Double valor) {
-        Extrato extrato_1 = new Extrato();
-        Extrato extrato_2 = new Extrato();
-        List<Extrato> extrato_conta_origem = conta_origem.getLancamento_extrato();
-        List<Extrato> extrato_conta_destino = conta_destino.getLancamento_extrato();
-
-        extrato_1.setTipo_conta(conta_origem.getTipo_conta());
-        extrato_1.setData(LocalDate.now());
-        extrato_1.setSaldo(conta_origem.getSaldo()+valor);
-        extrato_1.setDescricao("Transferência efetuada");
-        extrato_1.setValor(valor * (-1));
-        extrato_1.setNovo_saldo(extrato_1.getSaldo()+extrato_1.getValor());
-        extrato_1.setCheque_especial(conta_origem.getCheque_especial());
-        extrato_1.setCliente(conta_origem.getCliente());
-        extrato_conta_origem.add(extrato_1);
-        this.repository.save(extrato_1);
-
-        extrato_2.setTipo_conta(conta_destino.getTipo_conta());
-        extrato_2.setData(LocalDate.now());
-        extrato_2.setSaldo(conta_destino.getSaldo()-valor);
-        extrato_2.setDescricao("Transferência recebida");
-        extrato_2.setValor(valor);
-        extrato_2.setNovo_saldo(extrato_2.getSaldo()+extrato_2.getValor());
-        extrato_2.setCheque_especial(conta_destino.getCheque_especial());
-        extrato_2.setCliente(conta_destino.getCliente());
-        extrato_conta_destino.add(extrato_2);
-        this.repository.save(extrato_2);
-    }
-
-    public List<Extrato> extrato_cliente(Long id_cliente, Character tipo_conta) {
-        if (tipo_conta == 'c') {
-            return this.repository.findExtratoCliente("corrente", id_cliente);
-//            return this.repository.findExtratoCliente(id_cliente);
-        } else if (tipo_conta == 'p') {
-            return this.repository.findExtratoCliente("poupanca", id_cliente);
-//            return this.repository.findExtratoCliente(id_cliente);
+    public List<Extrato> extratoCliente(Long idCliente, Character tipoConta) {
+        if (tipoConta == 'c') {
+            return this.repository.findExtratoCliente("corrente", idCliente);
+        } else if (tipoConta == 'p') {
+            return this.repository.findExtratoCliente("poupanca", idCliente);
         } else {
             return null;
         }
+    }
+
+    public Page<Extrato> extratoConta(Long idConta, Pageable page) {
+        return this.repository.findExtratoByConta(idConta, page);
     }
 }

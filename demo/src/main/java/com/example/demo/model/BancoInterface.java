@@ -1,16 +1,30 @@
 package com.example.demo.model;
 
+import com.example.demo.repository.ExtratoRepository;
+import com.example.demo.service.ExtratoService;
+import liquibase.pro.packaged.L;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+
 public interface BancoInterface {
+
+
+    default void calcula_juros(Conta conta, Extrato extrato) {
+        if (conta.getSaldo() < 0) {
+            conta.setJuros(conta.getJuros() + (1000 + conta.getSaldo() ) * 0.10);
+        }
+    }
 
     default Double deposito(Conta conta, double valor) {
         double novo_saldo = conta.getSaldo() + valor;
         conta.setSaldo(novo_saldo);
 
-        if(conta.getSaldo() >= 0 && conta.getTipo_conta().equals("corrente")) {
-            conta.setCheque_especial(1000.00);
+        if(conta.getSaldo() >= 0 && conta.getContaTipo().equals("corrente")) {
+            conta.setChequeEspecial(1000.00);
         }
-        if (conta.getSaldo() < 0 && conta.getTipo_conta().equals("corrente")) {
-            conta.setCheque_especial(conta.getSaldo()+1000);
+        if (conta.getSaldo() < 0 && conta.getContaTipo().equals("corrente")) {
+            conta.setChequeEspecial(conta.getSaldo()+1000);
         }
         return novo_saldo;
     }
@@ -21,16 +35,16 @@ public interface BancoInterface {
         if(saldo >= valor) {
             saldo = saldo - valor;
             conta.setSaldo(saldo);
-            if (conta.getSaldo() < 0 && conta.getTipo_conta().equals("corrente")) {
-                conta.setCheque_especial(conta.getSaldo()+1000);
+            if (saldo < 0 && conta.getContaTipo().equals("corrente")) {
+                conta.setChequeEspecial(conta.getSaldo()+1000);
             }
             return saldo;
         } else if (saldo < valor && libera_limite(conta)){
             if (libera_valor_limite(saldo, valor)) {
                 saldo = saldo - valor;
                 conta.setSaldo(saldo);
-                if (conta.getSaldo() < 0 && conta.getTipo_conta().equals("corrente")) {
-                    conta.setCheque_especial(conta.getSaldo()+1000);
+                if (saldo < 0 && conta.getContaTipo().equals("corrente")) {
+                    conta.setChequeEspecial(conta.getSaldo()+1000);
                 }
                 return saldo;
             } else {
@@ -42,13 +56,34 @@ public interface BancoInterface {
     }
 
     default Boolean libera_limite(Conta conta) {
-        return conta.getTipo_conta().equals("corrente");
+        return conta.getContaTipo().equals("corrente");
     }
 
     default  Boolean libera_valor_limite(double saldo, double valor) {
         return saldo - valor + 1000.00 >= 0;
     }
 
+//    default Double calculaJuros(List<Extrato> extrato, Extrato extrato2, Extrato extrato3) {
+//        for (int x=0; x<extrato.size(); x++) {
+//            if (extrato2.getData().equals(extrato3.getData())) {
+//                extrato2.get
+//            } else {
+//                double juros = extrato2.getNovo_saldo() * 0.10;
+//            }
+//
+//        }
+//
+//    }
+
+//    public List<Extrato> extrato_cliente(Long idCliente, Character tipoConta) {
+//        if (tipoConta == 'c') {
+//            return this.repository.findExtratoCliente("corrente", idCliente);
+//        } else if (tipoConta == 'p') {
+//            return this.repository.findExtratoCliente("poupanca", idCliente);
+//        } else {
+//            return null;
+//        }
+//    }
 
     //
     // se o saldo < 0

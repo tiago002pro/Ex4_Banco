@@ -1,13 +1,14 @@
 package com.example.demo.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "cliente_pf")
 public class ClientePF extends Cliente{
     @Id
@@ -19,4 +20,10 @@ public class ClientePF extends Cliente{
 
     @Column(name = "rg")
     private String rg;
+
+    public ClientePF(String clienteTipo, String nome, String endereco, String cpf, String rg) {
+        super(clienteTipo, nome, endereco);
+        this.cpf = cpf;
+        this.rg = rg;
+    }
 }

@@ -1,25 +1,29 @@
 package com.example.demo.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Setter
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "conta")
 public class Conta implements BancoInterface {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "tipo_conta")
-    private String tipo_conta;
+    @Column(name = "conta_tipo")
+    private String contaTipo;
 
-    @Column(name = "ag")
-    private Integer ag;
+    @Column(name = "agencia")
+    private Integer agencia;
 
     @Column(name = "conta")
     private Integer conta;
@@ -28,7 +32,7 @@ public class Conta implements BancoInterface {
     private Double saldo;
 
     @Column(name = "cheque_especial")
-    private Double cheque_especial;
+    private Double chequeEspecial;
 
     @Column(name = "juros")
     private Double juros;
@@ -39,6 +43,25 @@ public class Conta implements BancoInterface {
 
     @OneToMany(cascade = CascadeType.MERGE)
     @JoinColumn(name = "id_conta", referencedColumnName = "id")
-    private List<Extrato> lancamento_extrato;
+    private List<Extrato> lancamentoExtrato;
+
+    public Conta(
+            String contaTipo,
+            Integer agecia,
+            Integer conta,
+            Double saldo,
+            Double juros,
+            Double chequeEspecial,
+            Cliente cliente,
+            List<Extrato> lancamentoExtrato) {
+        this.contaTipo = contaTipo;
+        this.agencia = agecia;
+        this.conta = conta;
+        this.saldo = saldo;
+        this.juros = juros;
+        this.chequeEspecial = chequeEspecial;
+        this.cliente = cliente;
+        this.lancamentoExtrato = lancamentoExtrato;
+    }
 
 }

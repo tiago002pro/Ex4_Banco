@@ -18,24 +18,26 @@ public class ClienteService {
 
     public String cadastraCliente(Character pessoa, Map<String, String> json) {
         if (pessoa == 'f') {
-            ClientePF clientePF = new ClientePF();
-
-            clientePF.setTipo("pf");
-            clientePF.setNome(json.get("nome"));
-            clientePF.setEndereco(json.get("endereco"));
-            clientePF.setCpf(json.get("cpf"));
-            clientePF.setRg(json.get("rg"));
+            ClientePF clientePF = new ClientePF(
+                    "pf",
+                    json.get("nome"),
+                    json.get("endereco"),
+                    json.get("cpf"),
+                    json.get("rg")
+            );
             this.repository.save(clientePF);
             return "Cadastrado com sucesso!";
-        } else if (pessoa == 'j') {
-            ClientePJ clientePJ = new ClientePJ();
 
-            clientePJ.setTipo("pj");
-            clientePJ.setNome(json.get("nome"));
-            clientePJ.setEndereco(json.get("endereco"));
-            clientePJ.setCnpj(json.get("cnpj"));
+        } else if (pessoa == 'j') {
+            ClientePJ clientePJ = new ClientePJ(
+                    "pj",
+                    json.get("nome"),
+                    json.get("endereco"),
+                    json.get("cnpj")
+            );
             this.repository.save(clientePJ);
             return "Cadastrado com sucesso!";
+
         } else {
             return "Não foi possível localizar o tipo de cliente para cadastro. Verifique a URL e tente novamente";
         }

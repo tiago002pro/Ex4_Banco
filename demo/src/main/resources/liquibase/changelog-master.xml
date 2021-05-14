@@ -13,7 +13,7 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="tipo" type="VARCHAR(2)"/>
+            <column name="cliente_tipo" type="VARCHAR(2)"/>
             <column name="nome" type="VARCHAR(200)"/>
             <column name="endereco" type="VARCHAR(200)"/>
         </createTable>
@@ -61,8 +61,8 @@
             <column name="id_cliente" type="BIGINT">
                 <constraints foreignKeyName="fk_id_cliente_referesnces_cliente" referencedTableName="cliente" referencedColumnNames="id"/>
             </column>
-            <column name="tipo_conta" type="VARCHAR(20)"/>
-            <column name="ag" type="BIGINT"/>
+            <column name="conta_tipo" type="VARCHAR(20)"/>
+            <column name="agencia" type="BIGINT"/>
             <column name="conta" type="BIGINT"/>
             <column name="saldo" type="DOUBLE"/>
             <column name="cheque_especial" type="DOUBLE"/>
@@ -81,22 +81,19 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="id_cliente" type="BIGINT">
-                <constraints foreignKeyName="fk_id_cliente_referesnces_cliente" referencedTableName="cliente" referencedColumnNames="id"/>
+                <constraints foreignKeyName="fk_id_cliente_references_cliente" referencedTableName="cliente" referencedColumnNames="id"/>
             </column>
             <column name="id_conta" type="BIGINT">
-                <constraints foreignKeyName="fk_id_conta_referesnces_conta" referencedTableName="conta" referencedColumnNames="id"/>
+                <constraints foreignKeyName="fk_id_conta_references_conta" referencedTableName="conta" referencedColumnNames="id"/>
             </column>
-            <column name="tipo_conta" type="VARCHAR(20)"/>
+            <column name="conta_tipo" type="VARCHAR(20)"/>
             <column name="data" type="DATE"/>
             <column name="descricao" type="VARCHAR(50)"/>
             <column name="saldo" type="DOUBLE"/>
             <column name="valor" type="DOUBLE"/>
             <column name="novo_saldo" type="DOUBLE"/>
             <column name="cheque_especial" type="DOUBLE"/>
+            <column name="juros" type="DOUBLE"/>
         </createTable>
     </changeSet>
-
-
-
-
 </databaseChangeLog>
